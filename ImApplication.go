@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"html/template"
 	"log"
 	"net/http"
 )
@@ -13,6 +14,11 @@ type ResponseData struct {
 }
 
 func main() {
+	//注册动态模板
+	registerTemplates()
+	//加载静态文件
+	http.Handle("/asset/", http.StripPrefix("/asset/", http.FileServer(http.Dir("asset"))))
+
 	http.HandleFunc("/user/login", userLogin)
 	http.ListenAndServe(":9001", nil)
 }
@@ -30,6 +36,20 @@ func WriteJSONResponse(w http.ResponseWriter, msg string, data interface{}, code
 		log.Println(err.Error())
 	}
 	w.Write(json)
+}
+
+// 注册模板
+func registerTemplates() {
+	tpl, err := template.ParseGlob("view/**/*")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	for _, v := range tpl.Templates() {
+		tplname := v.Name()
+		http.HandleFunc(tplname, func(writer http.ResponseWriter, request *http.Request) {
+			tpl.ExecuteTemplate(writer, tplname, nil)
+		})
+	}
 }
 
 func userLogin(writer http.ResponseWriter, request *http.Request) {

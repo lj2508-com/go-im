@@ -14,8 +14,16 @@ func main() {
 	http.Handle("/asset/", http.StripPrefix("/asset/", http.FileServer(http.Dir("asset"))))
 	//初始化数据库
 
+	//用户相关
 	http.HandleFunc("/user/login", ctrl.UserLogin)
 	http.HandleFunc("/user/register", ctrl.UserRegister)
+	//好友相关
+	http.HandleFunc("/contact/loadfriend", ctrl.LoadFriend)
+	http.HandleFunc("/contact/addfriend", ctrl.Addfriend)
+	//群聊相关
+	http.HandleFunc("/contact/loadcommunity", ctrl.LoadCommunity)
+	http.HandleFunc("/contact/joincommunity", ctrl.JoinCommunity)
+	http.HandleFunc("/contact/createcommunity", ctrl.CreateCommunity)
 	http.ListenAndServe(":9001", nil)
 }
 

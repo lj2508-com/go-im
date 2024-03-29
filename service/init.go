@@ -22,7 +22,7 @@ func init() {
 	DbEngine.ShowSQL(true)
 
 	// 自动创建表结构
-	err = DbEngine.Sync2(new(model.User))
+	err = DbEngine.Sync2(new(model.User), new(model.Contact), new(model.Community))
 	if err != nil {
 		log.Fatal(err.Error())
 	}

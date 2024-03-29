@@ -52,8 +52,8 @@ func (userService *UserService) Login(
 	if tmp.Id == 0 {
 		return tmp, errors.New("账号未注册，或密码输入错误")
 	}
-	if !util.ValidatePasswd(tmp.Passwd, tmp.Salt, plainpwd) {
-		return tmp, errors.New("密码不正确")
+	if !util.ValidatePasswd(plainpwd, tmp.Salt, tmp.Passwd) {
+		return tmp, errors.New("账号未注册，或密码不正确")
 	}
 	//生成临时token
 	str := fmt.Sprintf("%d", time.Now().Unix())

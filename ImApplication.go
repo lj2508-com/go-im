@@ -12,6 +12,7 @@ func main() {
 	registerTemplates()
 	//加载静态文件
 	http.Handle("/asset/", http.StripPrefix("/asset/", http.FileServer(http.Dir("asset"))))
+	http.Handle("/mnt/", http.FileServer(http.Dir(".")))
 	//初始化数据库
 
 	//用户相关
@@ -24,6 +25,8 @@ func main() {
 	http.HandleFunc("/contact/loadcommunity", ctrl.LoadCommunity)
 	http.HandleFunc("/contact/joincommunity", ctrl.JoinCommunity)
 	http.HandleFunc("/contact/createcommunity", ctrl.CreateCommunity)
+	http.HandleFunc("/chat", ctrl.Chat)
+	http.HandleFunc("/attach/upload", ctrl.Upload)
 	http.ListenAndServe(":9001", nil)
 }
 

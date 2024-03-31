@@ -63,3 +63,9 @@ func (userService *UserService) Login(
 	DbEngine.ID(tmp.Id).Cols("token").Update(&tmp)
 	return tmp, nil
 }
+
+func (userService *UserService) Find(userId int64) (user model.User) {
+	//通过手机号来查询是否存在账号，然后判断密码是否正确，密码错误和手机号不存在返回同一个错误
+	DbEngine.ID(userId).Get(&user)
+	return user
+}

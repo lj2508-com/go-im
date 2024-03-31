@@ -151,3 +151,15 @@ func (service *ContactService) CreateCommunity(comm model.Community) (ret model.
 		return com, err
 	}
 }
+
+// 获取到用户加入的群id列表
+func (service *ContactService) SearchComunityIds(userId int64) (comIds []int64) {
+	conconts := make([]model.Contact, 0)
+	comIds = make([]int64, 0)
+
+	DbEngine.Where("ownerid = ? and cate = ?", userId, model.CONCAT_CATE_COMUNITY).Find(&conconts)
+	for _, v := range conconts {
+		comIds = append(comIds, v.Dstobj)
+	}
+	return comIds
+}
